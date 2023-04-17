@@ -9,6 +9,8 @@ The primary goal of this project is to develop an interoperable framework for cl
 ### Dataset
 The dataset used in this project consists of X-ray images with labels indicating the presence or absence of a specific condition. The dataset is divided into a training set and a test set to ensure proper model evaluation.
 
+Dataset can be found [here](https://www.kaggle.com/datasets/paultimothymooney/chest-xray-pneumonia) 
+
 Insert Figure: Example images from the dataset
 
 ### Preprocessing
