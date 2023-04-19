@@ -3,9 +3,11 @@ from Dataloaders import CreateDataLoaders
 import torch
 import torch.nn as nn
 import torch.optim as optim
+from sklearn.metrics import roc_curve, auc
+import matplotlib.pyplot as plt
+
 
 def TrainModel(model, train_loader, test_loader, num_epochs=10, learning_rate=0.001, verbose = False):
-    
     criterion = nn.NLLLoss()
     optimizer = optim.Adam(model.parameters(), lr=learning_rate)
     
@@ -35,13 +37,15 @@ def TrainModel(model, train_loader, test_loader, num_epochs=10, learning_rate=0.
             correct = (predicted == y[:, 1].long()).sum().item()  # cast to long
             acc_list.append(correct / total)
             
-            if (i+1) % 100 == 0 and verbose == True:
+            if (i+1) % 100 == 0 and verbose:
                 print ('Epoch [{}/{}], Step [{}/{}], Loss: {:.4f}, Accuracy: {:.2f}%'
                        .format(epoch+1, num_epochs, i+1, total_step, loss.item(),
                                (correct / total) * 100))
                 
     # Test the model
     model.eval()
+    y_true = []
+    y_pred = []
     with torch.no_grad():
         correct = 0
         total = 0
@@ -52,28 +56,34 @@ def TrainModel(model, train_loader, test_loader, num_epochs=10, learning_rate=0.
             total += y.size(0)
             correct += (predicted == y[:, 1].long()).sum().item()  # cast to long
 
-        print('Test Accuracy of the model on the 10000 test images: {} %'.format((correct / total) * 100))
-        
-    # Save the model and plot
-    torch.save(model.state_dict(), 'model.ckpt')
+            # Collect true labels and predicted probabilities for AUC calculation
+            y_true.extend(y[:, 1].cpu().numpy())
+            y_pred.extend(torch.softmax(outputs, dim=1)[:, 1].cpu().numpy())
+
+        test_accuracy = (correct / total) * 100
+        print('Test Accuracy of the model on the 10000 test images: {} %'.format(test_accuracy))
+
+        fpr, tpr, _ = roc_curve(y_true, y_pred)
+        auc_score = auc(fpr, tpr)
+        print('AUC: {:.4f}'.format(auc_score))
     
-    return loss_list, acc_list
+    return loss_list, acc_list, test_accuracy, auc_score, fpr, tpr
 
 
 def CNNClassification(X_train, y_train, X_test, y_test, num_epochs = 10, learning_rate = 0.001, batch_size = 32, preprocess = True):
     train_loader, test_loader = CreateDataLoaders(X_train, y_train, X_test, y_test, batch_size = batch_size, preprocess = preprocess)
     model = CNN()
-    loss_list, acc_list = TrainModel(model, train_loader, test_loader, num_epochs = num_epochs, learning_rate = learning_rate)
-    return model, loss_list, acc_list
+    loss_list, acc_list, test_accuracy, auc_score, fpr, tpr = TrainModel(model, train_loader, test_loader, num_epochs = num_epochs, learning_rate = learning_rate)
+    return model, loss_list, acc_list, test_accuracy, auc_score, fpr, tpr
 
 def ShallowResNetClassification(X_train, y_train, X_test, y_test, num_epochs=10, learning_rate=0.001, batch_size=32, preprocess=True):
     train_loader, test_loader = CreateDataLoaders(X_train, y_train, X_test, y_test, batch_size=batch_size, preprocess=preprocess)
     model = ShallowResNet()
-    loss_list, acc_list = TrainModel(model, train_loader, test_loader, num_epochs=num_epochs, learning_rate=learning_rate)
-    return model, loss_list, acc_list
+    loss_list, acc_list, test_accuracy, auc_score, fpr, tpr = TrainModel(model, train_loader, test_loader, num_epochs=num_epochs, learning_rate=learning_rate)
+    return model, loss_list, acc_list, test_accuracy, auc_score, fpr, tpr
 
 def ShallowMobileNetClassification(X_train, y_train, X_test, y_test, num_epochs=10, learning_rate=0.001, batch_size=32, preprocess=True):
     train_loader, test_loader = CreateDataLoaders(X_train, y_train, X_test, y_test, batch_size=batch_size, preprocess=preprocess)
     model = ShallowMobileNet()
-    loss_list, acc_list = TrainModel(model, train_loader, test_loader, num_epochs=num_epochs, learning_rate=learning_rate)
-    return model, loss_list, acc_list
+    loss_list, acc_list, test_accuracy, auc_score, fpr, tpr = TrainModel(model, train_loader, test_loader, num_epochs=num_epochs, learning_rate=learning_rate)
+    return model, loss_list, acc_list, test_accuracy, auc_score, fpr, tpr

@@ -1,20 +1,16 @@
-from captum.attr import visualization as viz
+import PIL
 import torch
 import numpy as np
 import matplotlib.pyplot as plt
-from captum.attr import IntegratedGradients
-import torch
 import torchvision.transforms as transforms
-from captum.attr import LayerGradCam, visualization
-import PIL
-from captum.attr import IntegratedGradients, LayerGradCam, LayerAttribution
-from captum.attr import visualization as viz
+from captum.attr import IntegratedGradients, LayerGradCam, visualization, LayerAttribution
 import matplotlib as mpl
 
 
 def visualize_attributions(model, input_image, target_label, fig=None, axis=None, sign='all'):
+    device = 'cuda' if torch.cuda.is_available() else 'cpu'
     # Convert input image to a PyTorch tensor
-    input_tensor = torch.tensor(input_image).float().cuda().unsqueeze(0).unsqueeze(0)
+    input_tensor = torch.tensor(input_image).float().to(device).unsqueeze(0).unsqueeze(0)
 
     # Create an IntegratedGradients object for the model
     ig = IntegratedGradients(model)
@@ -27,7 +23,7 @@ def visualize_attributions(model, input_image, target_label, fig=None, axis=None
     input_image = input_image[:, :, np.newaxis]
 
     # Visualize the attributions
-    fig, axis = viz.visualize_image_attr(
+    fig, axis = visualization.visualize_image_attr(
         attributions_np,
         input_image,
         cmap='seismic',
@@ -105,15 +101,16 @@ def visualize_attributions_panel(model, images, labels, sign='all'):
 
 
 def layer_attribution_visualisation(model, input_image, layer_name, target_label, fig=None, axis=None, show=False):
+    
+    device = 'cuda' if torch.cuda.is_available() else 'cpu'
     # Convert the numpy array to a PIL image object
     target_image_pil = PIL.Image.fromarray(input_image)
-
     # Preprocess the image
     preprocess = transforms.Compose([
             transforms.Resize((128, 128)),
             transforms.ToTensor(),
         ])
-    input_tensor = preprocess(target_image_pil).unsqueeze(0).cuda()
+    input_tensor = preprocess(target_image_pil).unsqueeze(0).to(device)
 
     # Instantiate the LayerGradCam object
     layer_gc = LayerGradCam(model, dict(model.named_modules())[layer_name])
