@@ -33,7 +33,7 @@ These models were chosen due to their popularity, proven performance in image cl
 ### Training and Evaluation
 Each of the selected CNN models is trained using the preprocessed training dataset. The models' performance is then evaluated on the test dataset to determine their accuracy, loss, and other relevant metrics. The three methods had relatively similar performance on the datasets:
 
-!(ROC-AUC)[./Figures/ROC_AUC.png]
+![ROC-AUC](./Figures/ROC_AUC.png)
 
 ## Model Comparison and Insights
 
@@ -42,12 +42,11 @@ The results of the evaluation process are used to compare the performance of the
 
 
 
-
 ### Model Interpretability and Visualisation
 To gain insights into the decision-making process of the CNN models, we employ visualisation techniques to analyse the attributions of individual layers. This helps to identify the regions in the input images that the models find most relevant for classification.
 
-!(ResNet Integrated Gradients)[./Figures/ResNet2_integrated_gradients.png]
-!(ResNet Grad Cam)[./Figures/ResNet_Grad.png]
+![ResNet Integrated Gradients](./Figures/ResNet2_integrated_gradients.png)
+![ResNet Grad Cam](./Figures/ResNet_Grad.png)
 
 
 ## Conclusion
