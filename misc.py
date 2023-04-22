@@ -2,6 +2,7 @@ import cv2
 import os
 import random
 import torch
+import matplotlib.pyplot as plt
 
 # Preprocess lung images for CNN classification
 def preprocess_image(image):
@@ -10,18 +11,24 @@ def preprocess_image(image):
     image = image / 255.0
     return image
 
+import os
+
 def LoadLungImages(path):
     X = []
     y = []
     for folder in os.listdir(path):
-        for file in os.listdir(os.path.join(path, folder)):
-            image = cv2.imread(os.path.join(path, folder, file))
-            X.append(preprocess_image(image))
-            if folder == "NORMAL":
-                y.append(0)
-            else:
-                y.append(1)
+        folder_path = os.path.join(path, folder)
+        if os.path.isdir(folder_path):
+            for file in os.listdir(folder_path):
+                if file != '.DS_Store':
+                    image = cv2.imread(os.path.join(folder_path, file))
+                    X.append(preprocess_image(image))
+                    if folder == "NORMAL":
+                        y.append(0)
+                    else:
+                        y.append(1)
     return X, y
+
 
 
 def get_probabilities(model, dataloader):
@@ -56,3 +63,28 @@ def sample_images_with_labels(X, y, label, num_samples):
     images = [X[i] for i in samples]
     labels = [y[i] for i in samples]
     return images, labels
+
+def display_side_by_side(healthy_images, pneumonia_images, n=1):
+    if n <= 0:
+        raise ValueError("n must be a positive integer.")
+
+    fig, axes = plt.subplots(n, 2, figsize=(8, 4 * n))
+
+    for i in range(n):
+        if n == 1:
+            ax_h = axes[0]
+            ax_p = axes[1]
+        else:
+            ax_h = axes[i, 0]
+            ax_p = axes[i, 1]
+
+        ax_h.imshow(healthy_images[i], cmap='gray')
+        ax_h.set_title('Healthy')
+        ax_h.axis('off')
+
+        ax_p.imshow(pneumonia_images[i], cmap='gray')
+        ax_p.set_title('Pneumonia')
+        ax_p.axis('off')
+
+    plt.tight_layout()
+    plt.show()

@@ -11,7 +11,7 @@ The dataset used in this project consists of X-ray images with labels indicating
 
 Dataset can be found [here](https://www.kaggle.com/datasets/paultimothymooney/chest-xray-pneumonia).
 
-Insert Figure: Example images from the dataset
+![Sample Images](./Figures/Sample_Image.png)
 
 ### Preprocessing
 Prior to training the CNN models, the images are preprocessed by resizing, normalising, and augmenting the dataset. The data augmentation techniques applied include rotation, flipping, and zooming. This step helps to increase the dataset's size and diversity, reducing the risk of overfitting and improving the model's generalisation capabilities.
@@ -30,23 +30,25 @@ For this project, we have chosen to focus on the following CNN models:
 
 These models were chosen due to their popularity, proven performance in image classification tasks, and diverse architectural design. This variety allows for a thorough comparison and assessment of their suitability for X-ray image classification.
 
-### Training and Evaluation
+### Training and Model Performance:
 Each of the selected CNN models is trained using the preprocessed training dataset. The models' performance is then evaluated on the test dataset to determine their accuracy, loss, and other relevant metrics. The three methods had relatively similar performance on the datasets:
 
 ![ROC-AUC](./Figures/ROC_AUC.png)
 
 ## Model Comparison and Insights
 
-### Performance Comparison
-The results of the evaluation process are used to compare the performance of the various CNN models. Factors such as accuracy, loss, and training time are taken into consideration to determine the most suitable model for the given task.
-
-
-
 ### Model Interpretability and Visualisation
 To gain insights into the decision-making process of the CNN models, we employ visualisation techniques to analyse the attributions of individual layers. This helps to identify the regions in the input images that the models find most relevant for classification.
 
 ![ResNet Integrated Gradients](./Figures/ResNet2_integrated_gradients.png)
+
+The above visualization shows the Integrated Gradients for the ResNet model. Integrated Gradients is a feature attribution method that highlights the regions of the input image that contribute the most to the model's prediction. In this case, the highlighted areas correspond to the regions where the model identifies patterns associated with pneumonia.
+
 ![ResNet Grad Cam](./Figures/ResNet_Grad.png)
+
+To further investigate the decision-making process of the CNN models, we also employ the Grad-CAM visualization technique. Grad-CAM, or Gradient-weighted Class Activation Mapping, is a method that highlights the important regions in an input image based on the gradients of the target class flowing into the ResNet layer by layer. This insight can provide valuable information about the hierarchical nature of feature extraction in CNNs and help us further understand the model's decision-making process at different stages of its architecture.
+
+By examining the visualization, we can observe that the ResNet model is focusing on specific areas within the lung, which are likely to be indicative of pneumonia. This information can help us gain a better understanding of the model's decision-making process and potentially improve the model by fine-tuning its architecture or training strategies. Furthermore, such visualizations can be used to assess the reliability of the model and validate its predictions, ensuring a higher level of confidence when using the model for medical diagnoses.
 
 
 ## Conclusion
