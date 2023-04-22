@@ -2,7 +2,7 @@
 
 ## Introduction
 
-The primary goal of this project is to develop an interoperable framework for classifying X-ray images using multiple Convolutional Neural Network (CNN) models. Emphasis is placed on the ease of switching between different models, comparing their performance, and the ability to visualise and understand the models' decision-making process. In this report, we present the methodology, results, and insights obtained during the project.
+The primary goal of this project is to develop an interpretable framework for classifying X-ray images using multiple Convolutional Neural Network (CNN) models. Emphasis is placed on the ease of switching between different models, comparing their performance, and the ability to visualise and understand the models' decision-making process. In this report, we present the methodology, results, and insights obtained during the project.
 
 ## Data Preparation and Preprocessing
 
@@ -18,8 +18,8 @@ Prior to training the CNN models, the images are preprocessed by resizing, norma
 
 ## Methodology
 
-### Interoperable Framework
-To facilitate the interoperability of various CNN models, we have designed a unified interface for training and evaluation. This interface allows seamless switching between models and easy comparison of their performance. The framework is designed to handle popular CNN architectures such as 2-layer CNN, ResNet, and MobileNet.
+### Interpretable Framework
+To facilitate the interpretability of various CNN models, we have designed a unified interface for training and evaluation. This interface allows seamless switching between models and easy comparison of their performance. The framework is designed to handle popular CNN architectures such as 2-layer CNN, ResNet, and MobileNet.
 
 ### CNN Models
 For this project, we have chosen to focus on the following CNN models:
@@ -53,4 +53,4 @@ By examining the visualization, we can observe that the ResNet model is focusing
 
 ## Conclusion
 
-The project successfully demonstrates the development of an interoperable framework for classifying X-ray images using multiple CNN models. The unified interface enables easy model switching and performance comparison, allowing for more informed decisions when selecting a suitable model for a given task. The visualisation techniques employed in this project provide valuable insights into the models' decision-making processes, further enhancing our understanding of the models and improving their interpretability.
+The project successfully demonstrates the development of an interpretable framework for classifying X-ray images using multiple CNN models. The unified interface enables easy model switching and performance comparison, allowing for more informed decisions when selecting a suitable model for a given task. The visualisation techniques employed in this project provide valuable insights into the models' decision-making processes, further enhancing our understanding of the models and improving their interpretability.
