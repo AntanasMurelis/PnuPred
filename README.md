@@ -1,4 +1,4 @@
-# Interoperable AI: Classification of X-ray Images
+# Interpretable AI: Classification of X-ray Images
 
 ## Introduction
 
